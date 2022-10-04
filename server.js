@@ -8,6 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
+// need to update uri
 mongoose.connect(
   process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/pizza-hunt',
   {
