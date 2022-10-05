@@ -19,7 +19,7 @@ const userController = {
 
   // get one user by id
   getUserById({ params }, res) {
-    Pizza.findOne({ _id: params.id })
+    User.findOne({ _id: params.id })
       .populate({
         path: 'thoughts',
         select: '-__v'
@@ -34,14 +34,14 @@ const userController = {
 
   // createUser
   createUser({ body }, res) {
-    Pizza.create(body)
+    User.create(body)
       .then(dbUserData => res.json(dbUserData))
       .catch(err => res.json(err));
   },
 
   // update user by id
   updateUser({ params, body }, res) {
-    Pizza.findOneAndUpdate({ _id: params.id }, body, {
+    User.findOneAndUpdate({ _id: params.id }, body, {
       new: true,
       runValidators: true
     })

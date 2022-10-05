@@ -1,15 +1,22 @@
 const router = require('express').Router();
+
+// add addFriend and removeFriend later for bonus
 const {
     getAllUser,
     getUserById,
     createUser,
+    updateUser,
+    deleteUser,
 } = require('../../controllers/userController');
 
 // /api/users
 router.route('/').get(getAllUser).post(createUser);
 
 // /api/users/:userId
-router.route('/:userId').get(getUserById);
+router.route('/:userId').get(getUserById).put(updateUser).delete(deleteUser);
+
+// update to addFriend and removeFriend later for bonus
+// router.route('/:userId').get(getUserById).put(updateUser).delete(deleteUser);
 
 module.exports = router;
 
@@ -28,8 +35,10 @@ module.exports = router;
 //   "email": "lernantino@gmail.com"
 // }
 // PUT to update a user by its _id
+router.route('/:userId').put(updateUser);
 
 // DELETE to remove user by its _id
+router.route('/:userId').delete(deleteUser);
 
 // BONUS: Remove a user's associated thoughts when deleted.
 // /api/users/:userId/friends/:friendId
