@@ -1,4 +1,23 @@
+const router = require('express').Router();
+
+const {
+    gettAllThought,
+    addThought,
+    getThoughtById,
+    removeThought,
+    updateThought,
+} = require('../../controllers/thoughts-controller');
+
 // /api/thoughts
+router.route('/').get(gettAllThought).post(addThought);
+
+// /api/users/:userId
+router.route('/:userId/thoughts').get(getThoughtById).put(updateThought).delete(removeThought);
+
+// update to addFriend and removeFriend later for bonus
+// router.route('/:userId').get(getUserById).put(updateUser).delete(deleteUser);
+
+module.exports = router;
 
 // GET to get all thoughts
 

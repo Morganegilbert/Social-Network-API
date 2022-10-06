@@ -1,6 +1,23 @@
 const { Thought, User } = require('../models');
 
 const thoughtController = {
+
+  // get all Thought
+  getAllThought(req, res) {
+    Thought.find({})
+      .populate({
+        path: 'thoughts',
+        select: '-__v'
+      })
+      .select('-__v')
+      .sort({ _id: -1 })
+      .then(dbUserData => res.json(dbUserData))
+      .catch(err => {
+        console.log(err);
+        res.sendStatus(400);
+      });
+  },
+
   // add thought to user
   addThought({ params, body }, res) {
     console.log(params);
@@ -23,21 +40,19 @@ const thoughtController = {
       .catch(err => res.json(err));
   },
 
-  // add reply to thought
-  addReply({ params, body }, res) {
-    Thought.findOneAndUpdate(
-      { _id: params.thoughtId },
-      { $push: { replies: body } },
-      { new: true, runValidators: true }
-    )
-      .then(dbUserData => {
-        if (!dbUserData) {
-          res.status(404).json({ message: 'No user found with this id!' });
-          return;
-        }
-        res.json(dbUserData);
+  // get one Thought
+  getThoughtById({ params }, res) {
+    Thought.findOne({ _id: params.id })
+      .populate({
+        path: 'thoughts',
+        select: '-__v'
       })
-      .catch(err => res.json(err));
+      .select('-__v')
+      .then(dbUserData => res.json(dbUserData))
+      .catch(err => {
+        console.log(err);
+        res.sendStatus(400);
+      });
   },
 
   // remove thought
@@ -62,6 +77,23 @@ const thoughtController = {
       })
       .catch(err => res.json(err));
   },
+
+  // update user by id
+  updateThought({ params, body }, res) {
+    User.findOneAndUpdate({ _id: params.id }, body, {
+      new: true,
+      runValidators: true
+    })
+      .then(dbUserData => {
+        if (!dbUserData) {
+          res.status(404).json({ message: 'No thought found with this id!' });
+          return;
+        }
+        res.json(dbUserData);
+      })
+      .catch(err => res.json(err));
+  },
+
   // remove reply
   removeReply({ params }, res) {
     Thought.findOneAndUpdate(

@@ -5,14 +5,14 @@ const reactionSchema = new Schema(
     {
         reactionId: {
             type: Schema.Types.ObjectId,
-            default:
+            default: () => new Types.ObjectId()
         },
     },
     {
         reactionBody: {
             type: string,
             required: true,
-            // 280 character maximum
+            maxLength: 280
         },
     },
     {
@@ -28,7 +28,7 @@ const reactionSchema = new Schema(
             // Use a getter method to format the timestamp on query
         }    
     }
-),
+)
 // reactionId
     // Use Mongoose's ObjectId data type
     // Default value is set to a new ObjectId
@@ -54,6 +54,8 @@ const thoughtSchema = new Schema(
         thoughtText: {
             type: string,
             required: true,
+            minLength: 1,
+            maxLength: 280
             // Must be between 1 and 280 characters
         }
     },
@@ -71,9 +73,15 @@ const thoughtSchema = new Schema(
         }
     },
     {
-        reactions: {
-            // Array of nested documents created with the reactionSchema
-        }
+        reactions: [reactionSchema]
+    },
+    {
+        // Mongoose supports two Schema options to transform Objects after querying MongoDb: toJSON and toObject.
+        // Here we are indicating that we want virtuals to be included with our response, overriding the default behavior
+        toJSON: {
+          virtuals: true,
+        },
+        id: false,
     }
 )
 // thoughtText
