@@ -10,14 +10,14 @@ const reactionSchema = new Schema(
     },
     {
         reactionBody: {
-            type: string,
+            type: String,
             required: true,
             maxLength: 280
         },
     },
     {
         username: {
-            type: string,
+            type: String,
             required: true,
         },
     },
@@ -52,27 +52,24 @@ const reactionSchema = new Schema(
 const thoughtSchema = new Schema(
     {
         thoughtText: {
-            type: string,
+            type: String,
             required: true,
             minLength: 1,
             maxLength: 280
             // Must be between 1 and 280 characters
-        }
-    },
-    {
+        },
+    
         createdAt: {
             type: Date,
             default: Date.now,        
             // Use a getter method to format the timestamp on query
-        }
-    },
-    {
+        },
+    
         username: {
-            type: string,
+            type: String,
             required: true,
-        }
-    },
-    {
+        },
+    
         reactions: [reactionSchema]
     },
     {
