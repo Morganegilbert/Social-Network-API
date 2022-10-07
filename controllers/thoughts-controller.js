@@ -1,4 +1,4 @@
-const { Thought, User } = require('../models');
+const { Thought, User,  } = require('../models');
 
 const thoughtController = {
 
@@ -119,18 +119,22 @@ const thoughtController = {
   },
 
   // remove reaction
-  removeReaction(req, res) {
-    Thought.findOneAndUpdate(
-      { _id: req.params.thoughtId },
-      { $pull: { reactions: { reactionId: req.params.reactionId } } },
-      { runValidators: true, new: true }
-    )
-      .then((dbThoughtData) =>
-        !dbThoughtData
-          ? res.status(404).json({ message: 'No thought with this id!' })
-          : res.json(dbThoughtData)
+  removeReaction({ params }, res) {
+    console.log("This is params", params);
+      Thought.findOneAndUpdate(
+        { _id: params.thoughtId },
+        { $pull: {reactions: {reactionId: params.reactionId} } },
+        { safe: true, multi: true, returnOriginal: false }
       )
-      .catch((err) => res.status(500).json(err));
+      .then(dbThoughtData => {
+        console.log("This is DBThought", dbThoughtData);
+        if (!dbThoughtData) {
+          res.status(200).json({});
+          return;
+        }
+        res.json(dbThoughtData);
+      })
+      .catch(err => res.json(err));
   },
 }
 
