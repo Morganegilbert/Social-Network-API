@@ -13,7 +13,7 @@ const userSchema = new Schema(
             type: String,
             unique: true,
             required: true,
-            // add email validation /^([a-z0-9_.-]+)@([\da-z.-]+).([a-z.]{2,6})$/
+            match: [/^([a-z0-9_.-]+)@([\da-z.-]+).([a-z.]{2,6})$/, "Please use a valid email address",],
         },
 
         // array of _id values referencing the User model (self-reference)
