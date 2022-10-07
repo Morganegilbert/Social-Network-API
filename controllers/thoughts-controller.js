@@ -42,7 +42,7 @@ const thoughtController = {
 
   // get one Thought
   getThoughtById({ params }, res) {
-    Thought.findOne({ _id: params.userId })
+    Thought.findOne({ _id: params.thoughtId })
       .populate({
         path: 'reactions',
         select: '-__v'
@@ -58,13 +58,13 @@ const thoughtController = {
   // remove thought
   removeThought({ params }, res) {
     Thought.findOneAndDelete({ _id: params.thoughtId })
-      .then(removeThought => {
-        if (!removeThought) {
+      .then(dbThoughtData => {
+        if (!dbThoughtData) {
           return res.status(404).json({ message: 'No thought with this id!' });
         }
         return User.findOneAndUpdate(
-          { _id: params.userId },
-          { $pull: { thoughts: params.thoughtId } },
+          { username: dbThoughtsData.username },
+          { $pull: { thoughts: params.id } },
           { new: true }
         );
       })
@@ -80,7 +80,7 @@ const thoughtController = {
 
   // update user by id
   updateThought({ params, body }, res) {
-    Thought.findOneAndUpdate({ _id: params.id }, body, {
+    Thought.findOneAndUpdate({ _id: params.thoughtId }, body, {
       new: true,
       runValidators: true
     })
