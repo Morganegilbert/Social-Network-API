@@ -90,21 +90,6 @@ const userController = {
     .catch(err => res.json(err));
   },
 
-  // update friend by id
-  updateFriends({ params, body }, res) {
-    Thought.findOneAndUpdate({ _id: params.thoughtId }, body, {
-      new: true,
-      runValidators: true
-    })
-      .then(dbThoughtData => {
-        if (!dbThoughtData) {
-          res.status(404).json({ message: 'No thought found with this id!' });
-          return;
-        }
-        res.json(dbThoughtData);
-      })
-      .catch(err => res.json(err));
-  },
 };
 
 module.exports = userController;
