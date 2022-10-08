@@ -20,10 +20,8 @@ const thoughtController = {
 
   // add thought to user
   addThought({body}, res) {
-    // console.log(params);
     Thought.create(body)
       .then((dbThoughtData) => {
-        // console.log("this is body", body);
         return User.findByIdAndUpdate(
           body.userId,
           { $push: { "thoughts": dbThoughtData._id } },
@@ -31,7 +29,6 @@ const thoughtController = {
         );
       })
       .then(dbThoughtData => {
-        // console.log(dbThoughtData);
         if (!dbThoughtData) {
           res.status(404).json({ message: 'No user found with this id!' });
           return;
@@ -58,15 +55,12 @@ const thoughtController = {
 
   // remove thought
   removeThought({ params }, res) {
-    // console.log("RemoveThought Params", params);
     Thought.findOneAndDelete({ _id: params.thoughtId })
       .then(removeThought => {
-        // console.log("Remove Thought", removeThought);
         if (!removeThought) {
-          // console.log("this is remove thought", removeThought);
           return res.status(404).json({ message: 'No thought with this id!' });
         }
-        // console.log("This is params", params);
+        // removes thought from userId
         return User.findOneAndUpdate(
           { _id: removeThought.userId },
           { $pull: { thoughts: params.thoughtId } },
@@ -74,7 +68,6 @@ const thoughtController = {
         );
       })
       .then(dbUserData => {
-        // console.log("This is DBUser", dbUserData);
         if (!dbUserData) {
           res.status(204).json({});
           return;
@@ -122,14 +115,12 @@ const thoughtController = {
 
   // remove reaction
   removeReaction({ params }, res) {
-    console.log("This is params", params);
       Thought.findOneAndUpdate(
         { _id: params.thoughtId },
         { $pull: {reactions: {reactionId: params.reactionId} } },
         { safe: true, multi: true, returnOriginal: false }
       )
       .then(dbThoughtData => {
-        console.log("This is DBThought", dbThoughtData);
         if (!dbThoughtData) {
           res.status(200).json({});
           return;

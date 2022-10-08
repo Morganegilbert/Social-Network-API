@@ -60,7 +60,6 @@ const userController = {
   
   // add friend
   addFriend({ params }, res) {
-    console.log("This is params", params);
     User.findOneAndUpdate(
       { _id: params.userId },
       { $addToSet: { friends: params.friendId } },
@@ -81,14 +80,12 @@ const userController = {
 
   // remove friend
   removeFriend({ params }, res) {
-    console.log("This is params", params);
     User.findOneAndUpdate(
       { _id: params.userId },
       { $pull: {friends: params.friendId } },
       { safe: true, multi: true, returnOriginal: false }
     )
     .then(dbUserData => {
-      console.log("This is dbUserData", dbUserData);
       if (!dbUserData) {
         res.status(200).json({});
         return;
