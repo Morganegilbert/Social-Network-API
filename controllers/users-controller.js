@@ -3,14 +3,22 @@ const { User } = require('../models');
 const userController = {
   // get all users
   getAllUser(req, res) {
-    User.find()
-      .then((users) => res.json(users))
+    User.find({})
+      .then((user) => res.json(user))
       .catch((err) => res.status(500).json(err));
   },
 
   // get one user by id
   getUserById(req, res) {
     User.findOne({ _id: req.params.userId })
+      .populate({
+        path: 'friends',
+        select: '-__v'
+      })
+      .populate({
+        path: 'thoughts',
+        select: '-__v'
+      })
       .select('-__v')
       .then((user) =>
         !user

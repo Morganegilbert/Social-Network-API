@@ -23,10 +23,11 @@ const thoughtController = {
     // console.log(params);
     Thought.create(body)
       .then((dbThoughtData) => {
-        return User.findOneAndUpdate(
-          { _id: params.userId },
-          { $push: { thoughts: dbThoughtData._id } },
-          { new: true }
+        console.log("this is body", body);
+        return User.findByIdAndUpdate(
+          body.userId,
+          { $push: { "thoughts": dbThoughtData._id } },
+          { new: true, upsert: true }
         );
       })
       .then(dbThoughtData => {
