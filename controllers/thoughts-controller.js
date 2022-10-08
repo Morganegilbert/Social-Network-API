@@ -23,7 +23,7 @@ const thoughtController = {
     // console.log(params);
     Thought.create(body)
       .then((dbThoughtData) => {
-        console.log("this is body", body);
+        // console.log("this is body", body);
         return User.findByIdAndUpdate(
           body.userId,
           { $push: { "thoughts": dbThoughtData._id } },
@@ -31,7 +31,7 @@ const thoughtController = {
         );
       })
       .then(dbThoughtData => {
-        console.log(dbThoughtData);
+        // console.log(dbThoughtData);
         if (!dbThoughtData) {
           res.status(404).json({ message: 'No user found with this id!' });
           return;
@@ -66,10 +66,11 @@ const thoughtController = {
           // console.log("this is remove thought", removeThought);
           return res.status(404).json({ message: 'No thought with this id!' });
         }
+        // console.log("This is params", params);
         return User.findOneAndUpdate(
-          { _id: params.userId },
-          { $pull: { thoughts: removeThought._id } },
-          { new: true }
+          { _id: removeThought.userId },
+          { $pull: { thoughts: params.thoughtId } },
+          {  new: true }
         );
       })
       .then(dbUserData => {
