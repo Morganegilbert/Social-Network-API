@@ -76,7 +76,7 @@ const userController = {
     console.log("This is params", params);
     User.findOneAndUpdate(
       { _id: params.userId },
-      { $pull: {friends: params.userId } },
+      { $pull: {friends: params.friendId } },
       { safe: true, multi: true, returnOriginal: false }
     )
     .then(dbUserData => {
