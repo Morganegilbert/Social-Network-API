@@ -55,7 +55,7 @@ const userController = {
     console.log("This is params", params);
     User.findOneAndUpdate(
       { _id: params.userId },
-      { $addToSet: { friends: params.userId } },
+      { $addToSet: { friends: params.friendId } },
       { runValidators: true, new: true }
     )
       .populate({
